@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+require('dotenv').config();
 /* const cors = require('cors'); */
 const routes = require('./routes/index.js');
 
@@ -19,7 +20,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/', routes);
 
-/* app.use((err, req, res, next) => {
+app.use((err, req, res, next) => {
   const { statusCode = 500, message } = err;
   res.status(statusCode).send({
     message: statusCode === 500
@@ -27,7 +28,7 @@ app.use('/', routes);
       : message,
   });
   next();
-}); */
+});
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

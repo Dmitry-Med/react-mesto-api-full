@@ -1,5 +1,8 @@
 const Card = require('../models/card');
-const { catchFunction, catchWithValidationFunction } = require('../utils/catch-function ');
+const {
+  catchFunction,
+  catchWithValidationFunction,
+} = require('../utils/catch-function ');
 
 const getCards = (req, res) => {
   Card.find({})
@@ -34,10 +37,9 @@ const deleteCard = (req, res) => {
     })
     .then((card) => {
       if (card.owner.toString() === userId) {
-        Card.findByIdAndRemove(cardId)
-          .then((newCard) => {
-            res.send(newCard);
-          });
+        Card.findByIdAndRemove(cardId).then((newCard) => {
+          res.send(newCard);
+        });
       } else {
         const err = new Error('Нельзя удалять чужую карточку');
         throw err;
@@ -49,14 +51,11 @@ const deleteCard = (req, res) => {
 const addLike = (req, res) => {
   const { cardId } = req.params;
   const { _id } = req.user;
-  Card.findByIdAndUpdate(cardId, {
-    $addToSet: {
-      likes: _id,
-    },
-  }, {
-    runValidators: true,
-    new: true,
-  })
+  Card.findByIdAndUpdate(
+    cardId,
+    { $addToSet: { likes: _id } },
+    { runValidators: true, new: true },
+  )
     .populate(['likes', 'owner'])
     .orFail(() => {
       const err = new Error('Карточка не найдена');
@@ -70,14 +69,11 @@ const addLike = (req, res) => {
 const deleteLike = (req, res) => {
   const { cardId } = req.params;
   const { _id } = req.user;
-  Card.findByIdAndUpdate(cardId, {
-    $pull: {
-      likes: _id,
-    },
-  }, {
-    runValidators: true,
-    new: true,
-  })
+  Card.findByIdAndUpdate(
+    cardId,
+    { $pull: { likes: _id } },
+    { runValidators: true, new: true }
+  )
     .populate(['likes', 'owner'])
     .orFail(() => {
       const err = new Error('Карточка не найдена');

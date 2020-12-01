@@ -1,5 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+
+const { NODE_ENV, JWT_SECRET } = process.env;
 const User = require('../models/user');
 const { catchFunction, catchWithValidationFunction } = require('../utils/catch-function ');
 
@@ -62,7 +64,6 @@ const login = (req, res) => {
   return User.findOne({ email })
     .select('+password')
     .then((user) => {
-      console.log(user);
       if (!user) {
         return res.status(401).send({ message: 'Неправильный email' });
       }
@@ -71,11 +72,10 @@ const login = (req, res) => {
           if (!matched) {
             return res.status(401).send({ message: 'Неправильный пароль' });
           }
-          const token = jwt.sign({ _id: user._id }, 'super-strong-secret', { expiresIn: '7d' });
+          const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' });
           return res.send({ token });
         })
         .catch((err) => {
-          console.log(err);
           res.send({ message: err.message });
         });
     })
