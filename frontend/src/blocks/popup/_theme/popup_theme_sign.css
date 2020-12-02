@@ -1,0 +1,12 @@
+.popup_theme_sign {
+  position: static;
+  visibility: visible;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  cursor: none;
+  align-items: flex-start;
+  background: rgba(0, 0, 0, 0);
+  opacity: 1;
+}

@@ -1,0 +1,19 @@
+@import url(./__logo/header__logo.css);
+@import url(./__link/header__link.css);
+@import url(./__email/header__email.css);
+@import url(./__email/_hidden/header__email_hidden.css);
+@import url(./__container/header__container.css);
+@import url(./__box/header__box.css);
+
+.header {
+  min-height: 73px;
+  margin: 0 0 36px;
+  border-bottom: 1px solid rgba(84, 84, 84, 0.7);
+}
+
+@media screen and (max-width: 660px) {
+  .header {
+    min-height: 55px;
+    margin: 0 0 38px;
+  }
+}

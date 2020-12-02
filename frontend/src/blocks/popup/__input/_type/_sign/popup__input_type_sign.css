@@ -1,0 +1,7 @@
+.popup__input_type_sign {
+  color: #fff;
+  font-weight: 500;
+  border-style: none none solid;
+  border-bottom: 2px solid #ccc;
+  background-color: #000000;
+}

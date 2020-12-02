@@ -1,0 +1,9 @@
+.card__trash_hidden {
+  visibility: hidden;
+  border: none;
+  position: absolute;
+  top: 18px;
+  right: 15px;
+  padding: 0;
+  margin: 0;
+}

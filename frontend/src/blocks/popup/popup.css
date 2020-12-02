@@ -1,0 +1,43 @@
+@import url("./__close/popup__close.css");
+@import url("./__close-img/popup__close-img.css");
+@import url("./__place-container/popup__place-container.css");
+@import url("./__image/popup__image.css");
+@import url("./__container/popup__container.css");
+@import url("./__container/_theme/popup__container_theme_sign.css");
+@import url("./__place-title/popup__place-title.css");
+@import url("./__title/popup__title.css");
+@import url("./__title/_type/_smallgap/popup__title_type_smallgap.css");
+@import url("./__title/_type/_sign/popup__title_type_sign.css");
+@import url("./__input-field/popup__input-field.css");
+@import url("./__input/popup__input.css");
+@import url("./__input/_type/_error/popup__input_type_error.css");
+@import url("./__button/_disabled/popup__button_disabled.css");
+@import url("./__input/_type/_cardname/popup__input_type_cardname.css");
+@import url("./__input/_type/_name/popup__input_type_name.css");
+@import url("./__input/_type/_occupation/popup__input_type_occupation.css");
+@import url("./__input/_type/_link/popup__input_type_link.css");
+@import url("./__input/_type/_sign/popup__input_type_sign.css");
+@import url("./__error/_visible/popup__error_visible.css");
+@import url("./__error/popup__error.css");
+@import url("./__button/popup__button.css");
+@import url("./__button/_theme/popup__button_theme_sign.css");
+@import url("./__union-img/popup__union-img.css");
+@import url("./__union-text/popup__union-text.css");
+@import url("./__footnote/popup__footnote.css");
+@import url("./__link/popup__link.css");
+
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  background: rgba(0, 0, 0, 0.5);
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0.5s, opacity 0.5s ease-in-out;
+}

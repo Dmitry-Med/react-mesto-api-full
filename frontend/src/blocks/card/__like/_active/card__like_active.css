@@ -1,0 +1,10 @@
+.card__like_active {
+  border: none;
+  background: url(../../../../images/blackhart.svg) center no-repeat;
+  background-size: 100%;
+  height: 18px;
+  width: 20px;
+  cursor: pointer;    
+  padding: 0;
+  margin: 0 0 3px; 
+}

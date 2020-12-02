@@ -1,0 +1,6 @@
+.card__text-box {  
+   display:flex;
+   flex-direction: row;
+   justify-content: space-between;
+   box-sizing: border-box;
+}

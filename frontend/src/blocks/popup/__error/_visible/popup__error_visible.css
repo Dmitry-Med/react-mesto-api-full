@@ -1,0 +1,16 @@
+.popup__error_visible {   
+  font-family: Inter;  
+  font-size: 12px;
+  line-height: 15px;
+  color: #FF0000;
+  padding: 5px 0 0; 
+  
+}
+
+@media screen and (max-width: 520px) {
+  .popup__error  {      
+    font-size: 10px;
+    line-height: 1,25; 
+    padding: 3px 0 0; 
+  }
+}

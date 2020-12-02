@@ -1,0 +1,11 @@
+.popup__error {
+  min-height: 30px; 
+  display: block;
+  box-sizing: border-box;
+}
+
+@media screen and (max-width: 520px) {
+  .popup__error  {      
+    min-height: 20px; 
+   }
+}
