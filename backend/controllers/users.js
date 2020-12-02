@@ -1,31 +1,40 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const AiuthError = require('../errors/auth-err');
+const BadRequestError = require('../errors/bad-req-err');
+const NotFoundError = require('../errors/not-found-err');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 const User = require('../models/user');
-const { catchFunction, catchWithValidationFunction } = require('../utils/catch-function ');
 
-const getUsers = (req, res) => {
+const getUsers = (req, res, next) => {
   User.find({})
     .then((data) => res.send(data))
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+    .catch(next);
 };
 
-const getUser = (req, res) => {
+const getUser = (req, res, next) => {
   const { userId } = req.params;
   User.findById(userId)
     .orFail(() => {
-      const err = new Error('Пользователь не найден');
-      err.statusCode = 404;
-      throw err;
+      throw new NotFoundError('Пользователь не найден');
     })
     .then((user) => {
       res.send(user);
     })
-    .catch((err) => catchFunction(res, err));
+    .catch((err) => {
+      if (err.kind === 'ObjectId') {
+        const error = new BadRequestError('Невалидный id');
+        next(error);
+      } if (err.statusCode === 404) {
+        const error = new NotFoundError('Пользователь не найден');
+        next(error);
+      }
+      next(err);
+    });
 };
 
-const createUser = (req, res) => {
+const createUser = (req, res, next) => {
   const {
     name,
     about,
@@ -34,7 +43,7 @@ const createUser = (req, res) => {
     password,
   } = req.body;
   if (!email || !password) {
-    res.status(400).send({ message: 'Не передан email или password' });
+    throw new NotFoundError('Не передан email или password');
   }
   bcrypt.hash(password, 10)
     .then((hash) => User.create({
@@ -53,36 +62,49 @@ const createUser = (req, res) => {
         _id: user._id,
       });
     })
-    .catch((err) => catchWithValidationFunction(res, err));
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        const error = new BadRequestError('Ошибка валидации');
+        next(error);
+      }
+      next(err);
+    });
 };
 
-const login = (req, res) => {
+const login = (req, res, next) => {
   const { email, password } = req.body;
   if (!email || !password) {
-    return res.status(400).send({ message: 'Не передан email или password' });
+    throw new BadRequestError('Не передан email или password');
   }
   return User.findOne({ email })
     .select('+password')
     .then((user) => {
       if (!user) {
-        return res.status(401).send({ message: 'Неправильный email' });
+        throw new AiuthError('Неправильный email');
       }
       return bcrypt.compare(password, user.password)
         .then((matched) => {
           if (!matched) {
-            return res.status(401).send({ message: 'Неправильный пароль' });
+            throw new AiuthError('Неправильный пароль');
           }
           const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' });
           return res.send({ token });
         })
-        .catch((err) => {
-          res.send({ message: err.message });
+        .catch(() => {
+          const error = new BadRequestError('Ошибка запроса пароля');
+          next(error);
         });
     })
-    .catch((err) => catchWithValidationFunction(res, err));
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        const error = new BadRequestError('Ошибка валидации');
+        next(error);
+      }
+      next(err);
+    });
 };
 
-const updateUser = (req, res) => {
+const updateUser = (req, res, next) => {
   const { _id } = req.user;
   const { name, about } = req.body;
   User.findByIdAndUpdate(_id,
@@ -91,17 +113,21 @@ const updateUser = (req, res) => {
       new: true,
     })
     .orFail(() => {
-      const err = new Error('Пользователь не найден');
-      err.statusCode = 404;
-      throw err;
+      throw new NotFoundError('Пользователь не найден');
     })
     .then((user) => {
       res.send(user);
     })
-    .catch((err) => catchWithValidationFunction(res, err));
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        const error = new BadRequestError('Ошибка валидации');
+        next(error);
+      }
+      next(err);
+    });
 };
 
-const updateUserAvatar = (req, res) => {
+const updateUserAvatar = (req, res, next) => {
   const { _id } = req.user;
   const { avatar } = req.body;
   User.findByIdAndUpdate(_id,
@@ -110,26 +136,28 @@ const updateUserAvatar = (req, res) => {
       new: true,
     })
     .orFail(() => {
-      const err = new Error('Пользователь не найден');
-      err.statusCode = 404;
-      throw err;
+      throw new NotFoundError('Пользователь не найден');
     })
     .then((user) => {
       res.send(user);
     })
-    .catch((err) => catchWithValidationFunction(res, err));
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        const error = new BadRequestError('Ошибка валидации');
+        next(error);
+      }
+      next(err);
+    });
 };
 
-const getOwnerInfo = (req, res) => {
+const getOwnerInfo = (req, res, next) => {
   const { _id } = req.user;
   User.findById(_id)
     .orFail(() => {
-      const err = new Error('Пользователь не найден');
-      err.statusCode = 404;
-      throw err;
+      throw new NotFoundError('Пользователь не найден');
     })
     .then((user) => res.send(user))
-    .catch((err) => catchWithValidationFunction(res, err));
+    .catch(next);
 };
 
 module.exports = {
