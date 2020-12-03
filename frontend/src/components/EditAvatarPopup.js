@@ -1,8 +1,8 @@
-import React, { useRef, useState } from "react";
-import PopupWithForm from "./PopupWithForm";
+import React, { useRef, useState } from 'react';
+import PopupWithForm from './PopupWithForm';
 
 function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
-  const [avatar, setAvatar] = useState("");
+  const [avatar, setAvatar] = useState('');
   const avatarRef = useRef();
 
   function handleChangeAvatar(e) {

@@ -5,7 +5,6 @@ const ConflictError = require('../errors/conflict-err');
 
 const getCards = (req, res, next) => {
   Card.find({})
-    .populate(['likes', 'owner'])
     .then((data) => res.send(data))
     .catch(next);
 };
@@ -37,7 +36,6 @@ const deleteCard = (req, res, next) => {
   const { cardId } = req.params;
   const userId = req.user._id;
   Card.findById(cardId)
-    .populate('owner')
     .orFail(() => {
       throw new NotFoundError('Карточка не найдена');
     })
@@ -66,7 +64,6 @@ const addLike = (req, res, next) => {
   const { cardId } = req.params;
   const { _id } = req.user;
   Card.findByIdAndUpdate(cardId, { $addToSet: { likes: _id } }, { runValidators: true, new: true })
-    .populate(['likes', 'owner'])
     .orFail(() => {
       throw new NotFoundError('Карточка не найдена');
     })
@@ -87,7 +84,6 @@ const deleteLike = (req, res, next) => {
   const { cardId } = req.params;
   const { _id } = req.user;
   Card.findByIdAndUpdate(cardId, { $pull: { likes: _id } }, { runValidators: true, new: true })
-    .populate(['likes', 'owner'])
     .orFail(() => {
       const err = new Error('Карточка не найдена');
       err.statusCode = 404;

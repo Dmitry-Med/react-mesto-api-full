@@ -31,17 +31,9 @@ function App() {
   const [email, setEmail] = useState('');   
   const history = useHistory();
 
-  useEffect(() => {
-    const jwt = getToken();
-    api.getAppInfo(jwt).then((res) => {
-      const [cards, info] = res;
-      setCurrentUser(info);
-      setCards(cards);
-    });
-  }, []);
-
+  
   function handleCardLike(card) {
-    const isLiked = card.likes.some((i) => i._id === currentUser._id);    
+    const isLiked = card.likes.some((i) => i === currentUser._id);    
     if (!isLiked) {
       const jwt = getToken();
       api.putLike(card._id, jwt).then((newCard) => {
@@ -202,6 +194,24 @@ function App() {
       });
     }           
   }, []);
+
+  
+  
+  useEffect(() => {      
+    if (!loggedIn) {  
+      return
+    } 
+    const jwt = getToken();  
+    api.getAppInfo(jwt)
+      .then((res) => {
+        const [cards, info] = res;
+        setCurrentUser(info);
+        setCards(cards);        
+      }).catch((err) => {
+        console.log(err.message);
+      });       
+    }, [loggedIn]);    
+
 
   return (
     <CurrentUserContext.Provider value={currentUser}>          
