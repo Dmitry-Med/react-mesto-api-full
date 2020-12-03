@@ -207,9 +207,10 @@ function App() {
         const [cards, info] = res;
         setCurrentUser(info);
         setCards(cards);        
-      }).catch((err) => {
-        console.log(err.message);
-      });       
+      })
+      .catch((err) => {
+        console.log('Ошибка сервера');        
+      });    
     }, [loggedIn]);    
 
 
