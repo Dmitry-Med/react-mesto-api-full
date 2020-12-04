@@ -1,6 +1,6 @@
 import { setToken } from './utils/token';
 
-export const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
+export const BASE_URL = `${window.location.protocol}${process.env.REACT_APP_API_URL || '//localhost:3001'}`;
 
 export const register = (email, password) => {
   return fetch(`${BASE_URL}/signup`, {
