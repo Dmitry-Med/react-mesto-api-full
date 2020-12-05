@@ -7,6 +7,7 @@ const {
   login,
   createUser,
 } = require('../controllers/users.js');
+const NotFoundError = require('../errors/not-found-err');
 
 router.post('/signup', celebrate({
   body: Joi.object().keys({
@@ -23,8 +24,9 @@ router.post('/signin', celebrate({
 router.use(auth);
 router.use('/users', usersRoutes);
 router.use('/cards', cardsRoutes);
-router.use('*', (req, res) => {
-  res.status(404).send({ message: 'Запрашиваемый ресурс не найден' });
+router.use('*', (req, res, next) => {
+  const err = new NotFoundError('Запрашиваемый ресурс не найден');
+  next(err);
 });
 
 module.exports = router;

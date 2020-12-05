@@ -3,6 +3,8 @@ const jwt = require('jsonwebtoken');
 const AiuthError = require('../errors/auth-err');
 const BadRequestError = require('../errors/bad-req-err');
 const NotFoundError = require('../errors/not-found-err');
+const ConflictError = require('../errors/conflict-err');
+
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 const User = require('../models/user');
@@ -65,6 +67,9 @@ const createUser = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         const error = new BadRequestError('Ошибка валидации');
+        next(error);
+      } else if (err.code === 11000) {
+        const error = new ConflictError('Пользователь с таким email уже зарегистрирован');
         next(error);
       }
       next(err);
