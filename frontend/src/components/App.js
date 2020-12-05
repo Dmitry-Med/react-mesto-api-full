@@ -129,7 +129,7 @@ function App() {
         setStatus('unsucess');
         handleInfoTooltipOpen();
         return console.log('Некорректно заполнено одно из полей');          
-      } else if (err.code === 409) {
+      } else if (err.status === 409) {
         setStatus('unsucess');
         handleInfoTooltipOpen();
         return console.log('Пользователь с таким email уже зарегистрирован');
