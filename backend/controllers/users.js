@@ -5,7 +5,6 @@ const BadRequestError = require('../errors/bad-req-err');
 const NotFoundError = require('../errors/not-found-err');
 const ConflictError = require('../errors/conflict-err');
 
-
 const { NODE_ENV, JWT_SECRET } = process.env;
 const User = require('../models/user');
 
